@@ -3,7 +3,7 @@ contract Inbox {
     
     string public message;
     
-    constructor(string initMessage) public {
+    constructor(string initMessage) {
         message = initMessage;
     }
 

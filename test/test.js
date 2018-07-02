@@ -9,7 +9,7 @@ let inbox;
 
 beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
-    inbox = new web3.eth.Contract(JSON.parse(interface))
+    inbox = await new web3.eth.Contract(JSON.parse(interface))
         .deploy({ data: bytecode, arguments: ['Hi There'] })
         .send({ from: accounts[0], gas: '1000000' })
 });
@@ -23,11 +23,13 @@ describe('Inbox', () => {
     it('has a default message', async() => {
         // Message should be the same set during deployment of contract
         const message = await inbox.methods.message().call();
-        assert.equals(message, 'Hi There');
+        assert.equal(message, 'Hi There');
     });
     // Making a transaction with a function
     it('sets a new message', async() => {
-        inbox.methods.setMessage('Bye There !').send({ from: accounts[0] });
+        await inbox.methods.setMessage('Bye There !').send({ from: accounts[0] });
+        const message = await inbox.methods.message().call();
+        assert.equal(message, 'Bye There !');
     });
 
 });
